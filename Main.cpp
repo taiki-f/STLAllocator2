@@ -1,114 +1,10 @@
+ï»¿#include "STL.hpp"
 #include <iostream>
-#include <vector>
-#include <list>
-#include <algorithm>
-#include <assert.h>
-
-namespace drs
-{
-    // ƒAƒƒP[ƒ^[‚ÌIDŠÇ—
-    static unsigned int allocatelId = 0;
-    unsigned int GetAllocatelId() {
-        assert(allocatelId < (allocatelId + 1));
-        return ++allocatelId;
-    }
-
-    // ƒoƒbƒtƒ@\‘¢‘Ì
-    struct Buffer {
-        int         id;         // ƒAƒƒP[ƒ^[ƒoƒbƒtƒ@
-        void*       data;       // ƒf[ƒ^‚Ìƒ|ƒCƒ“ƒ^
-        std::size_t dataSize;   // ƒf[ƒ^ƒTƒCƒY
-    };
-
-    // ƒAƒƒP[ƒ^[ƒoƒbƒtƒ@
-    std::vector<Buffer> allocateBuffer;
-
-    // ©ìmalloc
-    void* malloc(std::size_t size)
-    {
-        // ƒoƒbƒtƒ@î•ñ‚ğ€”õ
-        Buffer buffer;
-        buffer.id = GetAllocatelId();
-        buffer.data = ::malloc(size);
-        buffer.dataSize = size;
-
-        // ƒoƒbƒtƒ@î•ñ‚ğ“o˜^
-        allocateBuffer.push_back(buffer);
-        return buffer.data;
-    }
-
-    // ©ìfree
-    void free(void* p)
-    {
-        // ŠY“–‚Ìƒoƒbƒtƒ@‚ğ’T‚·
-        auto it = std::find_if(
-            std::cbegin(allocateBuffer),
-            std::cend(allocateBuffer),
-            [&](const Buffer& buffer) {
-                return (buffer.data == p);
-            });
-        assert(it != std::cend(allocateBuffer));
-
-        // ƒoƒbƒtƒ@‚Ì‰ğ•ú
-        ::free(it->data);
-
-        // ƒoƒbƒtƒ@î•ñ‚ğ”jŠü
-        allocateBuffer.erase(it);
-    }
-
-    /// <summary>
-    /// ©ìƒAƒƒP[ƒ^[
-    /// </summary>
-    template<class T>
-    struct STLAllocator
-    {
-        using value_type = T;
-
-        // ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^
-        STLAllocator() = default;
-
-        // ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-        STLAllocator(const T&) {}
-
-        // ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-        template<class U>
-        STLAllocator(const U&) {}
-
-        // ƒƒ‚ƒŠ‚ÌŠm•Û
-        T* allocate(std::size_t num)
-        {
-            std::size_t size = sizeof(T) * num;
-            return static_cast<T*>(drs::malloc(size));
-        }
-
-        // ƒƒ‚ƒŠ‚ÌŠJ•ú
-        void deallocate(T* p, std::size_t num)
-        {
-            drs::free(p);
-        }
-    };
-
-    template<class T, class U>
-    bool operator==(const STLAllocator<T>& lhs, const STLAllocator<U>& rhs)
-    {
-        return true;
-    }
-
-    template<class T, class U>
-    bool operator!=(const STLAllocator<T>& lhs, const STLAllocator<U>& rhs)
-    {
-        return false;
-    }
-
-    // ©ìƒAƒƒP[ƒ^[‚ğg‚Á‚½STL
-    template<typename T> using vector = std::vector<T, STLAllocator<T>>;
-    template<typename T> using list = std::list<T, STLAllocator<T>>;
-}
 
 int main()
 {
     {
-        drs::vector<int> vec;
+        drs::stl::vector<int> vec;
         vec.reserve(2);
         vec.push_back(50);
         vec.push_back(55);
@@ -120,8 +16,6 @@ int main()
         {
             std::cout << v << std::endl;
         }
-
-        int i = 100;
     }
 
     return 0;

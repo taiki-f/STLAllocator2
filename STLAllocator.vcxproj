@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{B6938097-877C-4CCA-979F-343AB2478497}</ProjectGuid>
-    <RootNamespace>Project5</RootNamespace>
+    <ProjectGuid>{92E25E04-F7F5-4AC1-9E8A-E034524ED25B}</ProjectGuid>
+    <RootNamespace>STLAllocator</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -116,6 +116,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Memory.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Memory.hpp" />
+    <ClInclude Include="STL.hpp" />
+    <ClInclude Include="STLAllocator.hpp" />
+    <ClInclude Include="Types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
